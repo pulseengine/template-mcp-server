@@ -12,13 +12,16 @@ A template repository for creating Model Context Protocol (MCP) servers using th
    ```
 3. **Customize the server**:
    - Update `Cargo.toml` with your project details
-   - Modify `src/lib.rs` to implement your tools
+   - Modify `src/lib.rs` to implement your tools and resources
    - Update this README with your project information
 
 4. **Build and test**:
    ```bash
    cargo build
+   # Test tools
    echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | ./target/debug/template-mcp-server
+   # Test resources  
+   echo '{"jsonrpc":"2.0","id":2,"method":"resources/list","params":{}}' | ./target/debug/template-mcp-server
    ```
 
 ## 🛠 What's Included
@@ -26,7 +29,7 @@ A template repository for creating Model Context Protocol (MCP) servers using th
 This template provides:
 
 - **Complete MCP server setup** using PulseEngine MCP framework
-- **Automatic tool discovery** with `#[mcp_tools]` macro
+- **Automatic tool & resource discovery** with `#[mcp_tools]` and `#[mcp_resource]` macros
 - **Example tools** demonstrating different parameter types:
   - Simple status check (no parameters)
   - Echo with optional parameters
@@ -34,6 +37,11 @@ This template provides:
   - Structured data creation
   - List processing
   - Error handling examples
+- **Example resources** for read-only data access:
+  - Server status information (`template://server-status`)
+  - Server configuration (`template://server-config`)
+  - Parameterized data lookup (`template://example-data/{id}`)
+- **URI template support** for parameterized resources
 - **STDIO transport** for integration with MCP clients
 - **Proper logging configuration** for debugging
 
@@ -127,7 +135,53 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | ./target/deb
 
 # Call a tool
 echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_status","arguments":{}}}' | ./target/debug/template-mcp-server
+
+# List available resources
+echo '{"jsonrpc":"2.0","id":3,"method":"resources/list","params":{}}' | ./target/debug/template-mcp-server
+
+# Read a resource
+echo '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"template://server-status"}}' | ./target/debug/template-mcp-server
 ```
+
+## 🔍 Tools vs Resources
+
+This template demonstrates both **MCP Tools** and **MCP Resources**:
+
+### Tools (Operations)
+Tools are functions that **perform operations** or **modify state**. They:
+- Take parameters as input
+- Can have side effects (create, update, delete)
+- Return results from their execution
+- Are called via `tools/call` method
+
+**Examples in template:**
+- `get_status()` - Checks server status  
+- `echo(message, prefix)` - Transforms input
+- `add_numbers(a, b)` - Performs calculations
+- `create_data(...)` - Creates new data
+
+### Resources (Read-Only Data)
+Resources provide **read-only access to data**. They:
+- Use URI templates for identification  
+- Cannot modify state (read-only)
+- Are accessed via `resources/read` method
+- Perfect for configuration, status, or reference data
+
+**Examples in template:**
+- `template://server-status` - Current server status
+- `template://server-config` - Server configuration  
+- `template://example-data/{id}` - Data lookup by ID
+
+### When to Use Each
+
+| Use Tools For | Use Resources For |
+|---------------|-------------------|
+| Operations & actions | Read-only data access |
+| Data modification | Configuration settings |
+| Calculations | Status information |
+| API calls | Reference data |
+| File operations | Cached data |
+| Dynamic processing | Static information |
 
 ## 📝 Customizing Your Server
 

@@ -3,11 +3,13 @@
 //! This template provides a starting point for building MCP servers using the
 //! PulseEngine MCP framework. It demonstrates:
 //! - Using the #[mcp_server] macro for automatic server setup
-//! - Using the #[mcp_tools] macro for automatic tool discovery
+//! - Using the #[mcp_tools] macro for automatic tool and resource discovery
 //! - Basic tool implementations with different parameter types
+//! - Resource implementations for read-only data access
+//! - URI templates for parameterized resources
 //! - Proper error handling and async support
 
-use pulseengine_mcp_macros::{mcp_server, mcp_tools};
+use pulseengine_mcp_macros::{mcp_server, mcp_tools, mcp_resource};
 use serde::{Deserialize, Serialize};
 
 /// Example data structure that your tools might work with
@@ -17,6 +19,25 @@ pub struct ExampleData {
     pub name: String,
     pub value: f64,
     pub tags: Vec<String>,
+}
+
+/// Server status information (exposed as a resource)
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ServerStatus {
+    pub name: String,
+    pub version: String,
+    pub uptime_seconds: u64,
+    pub tools_count: usize,
+    pub resources_count: usize,
+}
+
+/// Server configuration (exposed as a resource)
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ServerConfig {
+    pub max_concurrent_requests: usize,
+    pub timeout_seconds: u64,
+    pub debug_mode: bool,
+    pub supported_formats: Vec<String>,
 }
 
 /// Template MCP Server
@@ -29,14 +50,24 @@ pub struct ExampleData {
     description = "A template MCP server demonstrating basic functionality",
     auth = "disabled"  // Change to "memory", "file", or remove for production
 )]
-#[derive(Default, Clone)]
+#[derive(Clone)]
 pub struct TemplateMcpServer {
+    start_time: std::time::Instant,
     // Add your server state here
     // Example: 
     // data_store: Arc<RwLock<HashMap<u64, ExampleData>>>,
 }
 
-/// All public methods in this impl block become MCP tools automatically
+impl Default for TemplateMcpServer {
+    fn default() -> Self {
+        Self {
+            start_time: std::time::Instant::now(),
+        }
+    }
+}
+
+/// All public methods in this impl block become MCP tools or resources automatically
+/// Methods with #[mcp_resource] become resources, others become tools
 #[mcp_tools]
 impl TemplateMcpServer {
     /// Get server status and basic information
@@ -132,6 +163,80 @@ impl TemplateMcpServer {
         } else {
             Ok("Tool executed successfully".to_string())
         }
+    }
+
+    // Resources - Read-only data accessible via MCP resource URIs
+    
+    /// Get server status information
+    ///
+    /// This resource provides read-only access to the server's current status.
+    /// Resources are for data that clients need to read but not modify.
+    #[mcp_resource(
+        uri_template = "template://server-status",
+        name = "server_status",
+        description = "Current server status and statistics",
+        mime_type = "application/json"
+    )]
+    pub async fn server_status_resource(&self) -> anyhow::Result<ServerStatus> {
+        let uptime = self.start_time.elapsed();
+        
+        Ok(ServerStatus {
+            name: "Template MCP Server".to_string(),
+            version: "0.1.0".to_string(),
+            uptime_seconds: uptime.as_secs(),
+            tools_count: 6, // Update this if you add/remove tools
+            resources_count: 3, // Update this if you add/remove resources
+        })
+    }
+
+    /// Get server configuration
+    ///
+    /// This resource exposes the server's configuration settings.
+    /// Resources are perfect for configuration data that clients need to read.
+    #[mcp_resource(
+        uri_template = "template://server-config",
+        name = "server_config", 
+        description = "Server configuration settings",
+        mime_type = "application/json"
+    )]
+    pub async fn server_config_resource(&self) -> anyhow::Result<ServerConfig> {
+        Ok(ServerConfig {
+            max_concurrent_requests: 100,
+            timeout_seconds: 30,
+            debug_mode: cfg!(debug_assertions),
+            supported_formats: vec![
+                "json".to_string(),
+                "text".to_string(),
+                "binary".to_string(),
+            ],
+        })
+    }
+
+    /// Get example data by ID
+    ///
+    /// This resource demonstrates parameterized resources using URI templates.
+    /// The {id} parameter is extracted from the URI when the resource is accessed.
+    #[mcp_resource(
+        uri_template = "template://example-data/{id}",
+        name = "example_data",
+        description = "Example data entry by ID", 
+        mime_type = "application/json"
+    )]
+    pub async fn example_data_resource(&self, id: String) -> anyhow::Result<ExampleData> {
+        // In a real implementation, you'd look up the data by ID
+        // For this template, we'll generate example data
+        let id_num = id.parse::<u64>().unwrap_or(1);
+        
+        Ok(ExampleData {
+            id: id_num,
+            name: format!("Example Item {}", id_num),
+            value: (id_num as f64) * 1.5,
+            tags: vec![
+                "example".to_string(),
+                "template".to_string(),
+                format!("id-{}", id_num),
+            ],
+        })
     }
 }
 
