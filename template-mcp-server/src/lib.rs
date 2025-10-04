@@ -46,7 +46,7 @@ pub struct ServerConfig {
 /// automatically generates the necessary MCP infrastructure.
 #[mcp_server(
     name = "Template MCP Server",
-    version = "0.2.0", 
+    version = "0.2.0",
     description = "A template MCP server demonstrating basic functionality",
     auth = "disabled"  // Change to "memory", "file", or remove for production
 )]
@@ -54,7 +54,7 @@ pub struct ServerConfig {
 pub struct TemplateMcpServer {
     start_time: std::time::Instant,
     // Add your server state here
-    // Example: 
+    // Example:
     // data_store: Arc<RwLock<HashMap<u64, ExampleData>>>,
 }
 
@@ -71,17 +71,21 @@ impl Default for TemplateMcpServer {
 #[mcp_tools]
 impl TemplateMcpServer {
     /// Get server status and basic information
-    /// 
+    ///
     /// This is a simple tool that requires no parameters and returns
     /// a status message about the server.
     pub async fn get_status(&self) -> anyhow::Result<String> {
-        Ok("Template MCP Server is running and ready to serve requests".to_string())
+        let uptime = self.start_time.elapsed().as_secs();
+        Ok(format!(
+            "Template MCP Server is running and ready to serve requests. Uptime: {}s",
+            uptime
+        ))
     }
 
     /// Echo back a message with optional prefix
     ///
     /// Demonstrates a tool with both required and optional parameters.
-    /// 
+    ///
     /// # Parameters
     /// - message: The message to echo back (required)
     /// - prefix: Optional prefix to add to the message
@@ -95,7 +99,7 @@ impl TemplateMcpServer {
     /// Add two numbers together
     ///
     /// Demonstrates a tool that works with numeric parameters.
-    /// 
+    ///
     /// # Parameters
     /// - a: First number
     /// - b: Second number
@@ -107,7 +111,7 @@ impl TemplateMcpServer {
     ///
     /// Demonstrates a tool that creates and returns structured data.
     ///
-    /// # Parameters  
+    /// # Parameters
     /// - name: Name for the data entry
     /// - value: Numeric value
     /// - tags: Optional list of tags
@@ -170,11 +174,11 @@ impl TemplateMcpServer {
     // Will re-enable once framework is fixed
     //
     // Example resources that will be available once the framework is fixed:
-    // 
+    //
     // #[mcp_resource(uri_template = "template://server-status")]
     // pub async fn server_status_resource(&self) -> anyhow::Result<ServerStatus>
     //
-    // #[mcp_resource(uri_template = "template://server-config")]  
+    // #[mcp_resource(uri_template = "template://server-config")]
     // pub async fn server_config_resource(&self) -> anyhow::Result<ServerConfig>
     //
     // #[mcp_resource(uri_template = "template://example-data/{id}")]

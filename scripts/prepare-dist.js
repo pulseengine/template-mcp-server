@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
-console.log('Preparing distribution files...');
+console.log("Preparing distribution files...");
 
 // Create dist directory
-const distDir = path.join(__dirname, '..', 'dist');
+const distDir = path.join(__dirname, "..", "dist");
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
@@ -18,11 +18,11 @@ const arch = process.arch;
 
 // Map to Rust target triples
 const targetMap = {
-  'darwin-x64': 'x86_64-apple-darwin',
-  'darwin-arm64': 'aarch64-apple-darwin',
-  'linux-x64': 'x86_64-unknown-linux-gnu',
-  'linux-arm64': 'aarch64-unknown-linux-gnu',
-  'win32-x64': 'x86_64-pc-windows-msvc',
+  "darwin-x64": "x86_64-apple-darwin",
+  "darwin-arm64": "aarch64-apple-darwin",
+  "linux-x64": "x86_64-unknown-linux-gnu",
+  "linux-arm64": "aarch64-unknown-linux-gnu",
+  "win32-x64": "x86_64-pc-windows-msvc",
 };
 
 const rustTarget = targetMap[`${platform}-${arch}`];
@@ -32,8 +32,9 @@ if (!rustTarget) {
 }
 
 // Binary name (with .exe extension on Windows)
-const binaryName = platform === 'win32' ? 'template-mcp-server.exe' : 'template-mcp-server';
-const sourcePath = path.join(__dirname, '..', 'target', 'release', binaryName);
+const binaryName =
+  platform === "win32" ? "template-mcp-server.exe" : "template-mcp-server";
+const sourcePath = path.join(__dirname, "..", "target", "release", binaryName);
 const destPath = path.join(distDir, binaryName);
 
 // Check if binary exists
@@ -81,10 +82,10 @@ process.on('SIGINT', () => child.kill('SIGINT'));
 process.on('SIGTERM', () => child.kill('SIGTERM'));
 `;
 
-fs.writeFileSync(path.join(distDir, 'index.js'), wrapperContent);
-fs.chmodSync(path.join(distDir, 'index.js'), 0o755);
+fs.writeFileSync(path.join(distDir, "index.js"), wrapperContent);
+fs.chmodSync(path.join(distDir, "index.js"), 0o755);
 
-console.log('Created Node.js wrapper');
+console.log("Created Node.js wrapper");
 
 // Create platform-specific package info
 const packageInfo = {
@@ -92,12 +93,12 @@ const packageInfo = {
   arch,
   rustTarget,
   binaryName,
-  version: require('../package.json').version,
+  version: require("../package.json").version,
 };
 
 fs.writeFileSync(
-  path.join(distDir, 'platform.json'),
-  JSON.stringify(packageInfo, null, 2)
+  path.join(distDir, "platform.json"),
+  JSON.stringify(packageInfo, null, 2),
 );
 
-console.log('Distribution files prepared successfully');
+console.log("Distribution files prepared successfully");

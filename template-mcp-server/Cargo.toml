@@ -29,3 +29,4 @@ pulseengine-mcp-macros = { workspace = true }
 pulseengine-mcp-protocol = { workspace = true }
 pulseengine-mcp-transport = { workspace = true }
 rand = "0.9"
+schemars = "1.0"

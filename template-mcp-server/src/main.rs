@@ -3,8 +3,8 @@
 //! This template demonstrates the basic structure for creating an MCP server
 //! using the PulseEngine MCP framework with automatic tool discovery.
 
-use template_mcp_server::TemplateMcpServer;
 use pulseengine_mcp_server::McpServerBuilder;
+use template_mcp_server::TemplateMcpServer;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

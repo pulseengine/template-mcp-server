@@ -10,9 +10,29 @@ This guide explains how to publish your MCP server to npm for easy distribution.
 
 ## Initial Setup
 
-### 1. Update Package Information
+### 1. Validate Template Initialization
 
-Edit `package.json`:
+Before publishing, ensure all template placeholders have been replaced:
+
+```bash
+# Run the validation script
+./scripts/validate.sh
+
+# If errors found, run initialization script
+./init.sh
+```
+
+This ensures:
+
+- All `@yourusername` placeholders are replaced
+- Package names are updated everywhere
+- Author information is correct
+- Repository URLs are updated
+
+### 2. Update Package Information
+
+Edit `package.json` (or use `./init.sh` to do this automatically):
+
 ```json
 {
   "name": "@yourusername/your-mcp-server",
@@ -24,7 +44,7 @@ Edit `package.json`:
 }
 ```
 
-### 2. Get npm Token
+### 3. Get npm Token
 
 ```bash
 npm login
@@ -32,6 +52,7 @@ npm token create --read-only=false
 ```
 
 Copy the token and add it to GitHub:
+
 1. Go to Settings → Secrets and variables → Actions
 2. Add new secret named `NPM_TOKEN`
 3. Paste your npm token
@@ -78,6 +99,7 @@ npm publish --access public
 5. Click "Run workflow"
 
 This will:
+
 - Build binaries for all platforms
 - Create a GitHub release with binaries
 - Publish the main package to npm
@@ -92,6 +114,7 @@ This will:
 ## Platform Support
 
 The npm package supports:
+
 - **macOS**: x64, arm64
 - **Linux**: x64, arm64
 - **Windows**: x64
@@ -101,6 +124,7 @@ Users will automatically get the correct binary for their platform.
 ## Package Structure on npm
 
 Your package will be available as:
+
 ```bash
 # Main package (includes postinstall script)
 npm install @yourusername/your-mcp-server
@@ -188,6 +212,7 @@ npm publish --dry-run
 
 The postinstall script downloads platform binaries from GitHub releases.
 Ensure:
+
 1. GitHub release exists with correct binaries
 2. Binary names match platform expectations
 3. Release is public (not draft)
@@ -195,28 +220,33 @@ Ensure:
 ## Distribution Strategies
 
 ### 1. Simple npm Package
+
 - Single package with postinstall script
 - Downloads binary from GitHub on install
 - Best for most users
 
 ### 2. Platform-Specific Packages
+
 - Separate packages per platform
 - No postinstall needed
 - Larger total size but faster install
 
 ### 3. WebAssembly (Future)
+
 - Compile to WASM
 - Universal compatibility
 - Some performance tradeoff
 
 ## Best Practices
 
-1. **Test all platforms** before publishing
-2. **Use GitHub Actions** for consistent builds
-3. **Document installation** clearly in README
-4. **Version carefully** - npm doesn't allow unpublishing easily
-5. **Include examples** of client configuration
-6. **Test with real MCP clients** before release
+1. **Validate before publishing** - Run `./scripts/validate.sh` to check for template placeholders
+2. **Test all platforms** before publishing
+3. **Use GitHub Actions** for consistent builds
+4. **Document installation** clearly in README
+5. **Version carefully** - npm doesn't allow unpublishing easily
+6. **Include examples** of client configuration
+7. **Test with real MCP clients** before release
+8. **Run pre-commit hooks** - Install with `pre-commit install` and run before commits
 
 ## Maintenance
 
@@ -246,6 +276,7 @@ cargo audit
 ### Deprecation
 
 If needed:
+
 ```bash
 npm deprecate @yourusername/your-mcp-server@"< 1.0.0" "Please upgrade to v1.0.0"
 ```

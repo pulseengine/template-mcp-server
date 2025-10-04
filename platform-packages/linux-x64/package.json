@@ -3,9 +3,19 @@
   "version": "0.1.0",
   "description": "Template MCP Server binary for Linux x64",
   "main": "index.js",
-  "os": ["linux"],
-  "cpu": ["x64"],
-  "keywords": ["mcp", "template", "binary", "linux", "x64"],
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "keywords": [
+    "mcp",
+    "template",
+    "binary",
+    "linux",
+    "x64"
+  ],
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
   "repository": {

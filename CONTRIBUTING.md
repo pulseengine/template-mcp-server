@@ -5,11 +5,13 @@ Thank you for your interest in contributing! This document provides guidelines f
 ## Development Setup
 
 1. **Prerequisites**
+
    - Rust 1.75.0 or later
    - Git
    - Node.js (for MCP Inspector testing)
 
 2. **Clone and Setup**
+
    ```bash
    git clone https://github.com/yourusername/your-mcp-server.git
    cd your-mcp-server
@@ -17,6 +19,7 @@ Thank you for your interest in contributing! This document provides guidelines f
    ```
 
 3. **Install MCP Inspector** (for testing)
+
    ```bash
    npm install -g @modelcontextprotocol/inspector
    ```
@@ -26,28 +29,32 @@ Thank you for your interest in contributing! This document provides guidelines f
 ### Making Changes
 
 1. **Create a branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
 2. **Make your changes**
+
    - Follow Rust conventions
    - Add documentation for new tools
    - Update README if needed
 
 3. **Test your changes**
+
    ```bash
    # Build
    cargo build
-   
+
    # Test tools list
    echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | ./target/debug/template-mcp-server
-   
+
    # Test with MCP Inspector
    npx @modelcontextprotocol/inspector ./target/debug/template-mcp-server
    ```
 
 4. **Commit and push**
+
    ```bash
    git add .
    git commit -m "feat: add new awesome tool"
@@ -68,6 +75,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 When adding new MCP tools:
 
 1. **Tool Method Signature**
+
    ```rust
    /// Clear description of what the tool does
    ///
@@ -84,11 +92,13 @@ When adding new MCP tools:
    ```
 
 2. **Parameter Types**
+
    - Use standard Rust types (String, i32, f64, bool, Vec<T>)
    - Wrap optional parameters in `Option<T>`
    - Use custom structs for complex parameters
 
 3. **Error Handling**
+
    - Return `anyhow::Result<T>` for all tools
    - Provide meaningful error messages
    - Use `anyhow::anyhow!("message")` for custom errors
@@ -104,20 +114,23 @@ When adding new MCP tools:
 Test all changes with:
 
 1. **Direct JSON-RPC testing**
+
    ```bash
    # Test tool discovery
    echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | ./target/debug/template-mcp-server
-   
+
    # Test tool execution
    echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"your_tool","arguments":{"param":"value"}}}' | ./target/debug/template-mcp-server
    ```
 
 2. **MCP Inspector testing**
+
    ```bash
    npx @modelcontextprotocol/inspector ./target/debug/template-mcp-server
    ```
 
 3. **Unit tests** (if applicable)
+
    ```bash
    cargo test
    ```
@@ -125,6 +138,7 @@ Test all changes with:
 ## Commit Message Format
 
 Use conventional commits:
+
 - `feat:` - New features
 - `fix:` - Bug fixes
 - `docs:` - Documentation changes
@@ -133,6 +147,7 @@ Use conventional commits:
 - `chore:` - Maintenance tasks
 
 Examples:
+
 - `feat: add weather lookup tool`
 - `fix: handle empty parameter arrays`
 - `docs: update tool usage examples`
