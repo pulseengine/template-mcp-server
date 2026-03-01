@@ -1,10 +1,27 @@
+<div align="center">
+
 # Template MCP Server
 
-A template repository for creating Model Context Protocol (MCP) servers using the PulseEngine MCP framework in Rust.
+<sup>Template for creating MCP servers with PulseEngine</sup>
 
-## 🚀 Getting Started
+&nbsp;
 
-### Option 1: Automated Setup (Recommended) ⚡
+![Rust](https://img.shields.io/badge/Rust-CE422B?style=flat-square&logo=rust&logoColor=white&labelColor=1a1b27)
+![MCP](https://img.shields.io/badge/MCP-654FF0?style=flat-square&logoColor=white&labelColor=1a1b27)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square&labelColor=1a1b27)
+
+</div>
+
+&nbsp;
+
+A template repository for creating Model Context Protocol (MCP) servers using the [PulseEngine MCP framework](https://github.com/pulseengine/mcp) in Rust.
+
+> [!NOTE]
+> Part of the PulseEngine toolchain. Use this template to scaffold new MCP servers with tools, resources, and authentication built in.
+
+## Getting Started
+
+### Option 1: Automated Setup (Recommended)
 
 The fastest way to customize this template for your project:
 
@@ -31,7 +48,7 @@ cargo build --release
 
 The initialization script takes ~2 minutes and handles all the tedious find-and-replace work automatically.
 
-### Option 2: Manual Setup 🔧
+### Option 2: Manual Setup
 
 If you prefer to set up manually:
 
@@ -101,7 +118,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | ./target/rel
 echo '{"jsonrpc":"2.0","id":2,"method":"resources/list","params":{}}' | ./target/release/your-mcp-server
 ```
 
-## 🛠 What's Included
+## What's Included
 
 This template provides:
 
@@ -122,7 +139,7 @@ This template provides:
 - **STDIO transport** for integration with MCP clients
 - **Proper logging configuration** for debugging
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 template-mcp-server/
@@ -140,7 +157,7 @@ template-mcp-server/
     └── dependabot.yml
 ```
 
-## 📦 Installation
+## Installation
 
 ### From npm (Recommended)
 
@@ -188,7 +205,7 @@ Pre-built binaries are available for:
 
 Download from [GitHub Releases](https://github.com/yourusername/template-mcp-server/releases)
 
-## 🔧 Development
+## Development
 
 ### Pre-commit Hooks Setup
 
@@ -252,7 +269,7 @@ echo '{"jsonrpc":"2.0","id":3,"method":"resources/list","params":{}}' | ./target
 echo '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"template://server-status"}}' | ./target/debug/template-mcp-server
 ```
 
-## 🔍 Tools vs Resources
+## Tools vs Resources
 
 This template demonstrates both **MCP Tools** and **MCP Resources**:
 
@@ -298,7 +315,7 @@ Resources provide **read-only access to data**. They:
 | File operations      | Cached data            |
 | Dynamic processing   | Static information     |
 
-## 📝 Customizing Your Server
+## Customizing Your Server
 
 ### 1. Update Package Information
 
@@ -353,7 +370,7 @@ Modify the `#[mcp_server]` attributes:
 )]
 ```
 
-## 🔌 Integration with MCP Clients
+## Integration with MCP Clients
 
 ### Claude Desktop
 
@@ -410,7 +427,7 @@ Using local binary:
 }
 ```
 
-## 📚 Framework Features
+## Framework Features
 
 This template uses the PulseEngine MCP framework which provides:
 
@@ -422,7 +439,7 @@ This template uses the PulseEngine MCP framework which provides:
 - **Monitoring** - Built-in metrics and tracing
 - **Validation** - Request/response validation
 
-## 🔐 Authentication
+## Authentication
 
 The template includes authentication support:
 
@@ -436,7 +453,7 @@ For production use, configure file-based auth:
 #[mcp_server(auth = "file")]
 ```
 
-## 📊 Monitoring & Debugging
+## Monitoring & Debugging
 
 The server includes comprehensive logging. Set log levels:
 
@@ -444,7 +461,7 @@ The server includes comprehensive logging. Set log levels:
 RUST_LOG=debug ./target/debug/template-mcp-server
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -452,11 +469,11 @@ RUST_LOG=debug ./target/debug/template-mcp-server
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This template is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Common Issues After Setup
 
@@ -506,13 +523,13 @@ This will check for:
 - Missing author information
 - Broken repository URLs
 
-## 🆘 Support
+## Support
 
 - [PulseEngine MCP Documentation](https://docs.rs/pulseengine-mcp-protocol)
 - [MCP Specification](https://modelcontextprotocol.io/specification/2025-06-18)
 - [GitHub Issues](https://github.com/yourusername/your-mcp-server/issues)
 
-## 🏷 Template Usage
+## Template Usage
 
 When using this template:
 
@@ -522,4 +539,12 @@ When using this template:
 4. **Delete this section** from your README
 5. **Update all placeholder information** with your project details
 
-Happy building! 🎉
+Happy building!
+
+---
+
+<div align="center">
+
+<sub>Part of <a href="https://github.com/pulseengine">PulseEngine</a> &mdash; formally verified WebAssembly toolchain for safety-critical systems</sub>
+
+</div>
