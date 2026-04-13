@@ -28,5 +28,5 @@ pulseengine-mcp-server = { workspace = true }
 pulseengine-mcp-macros = { workspace = true }
 pulseengine-mcp-protocol = { workspace = true }
 pulseengine-mcp-transport = { workspace = true }
-rand = "0.9"
+rand = "0.10"
 schemars = "1.0"
