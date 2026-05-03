@@ -13,6 +13,10 @@ env:
 jobs:
   pre-commit:
     name: Pre-commit Checks
+    # Stays on ubuntu-latest: actions/setup-python + system pip install
+    # of pre-commit interacts with smithy's preinstalled Python 3.12 in
+    # ways we haven't validated yet (no `--user` flag, no venv). Keep
+    # here until we have a clean recipe.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -45,6 +49,9 @@ jobs:
 
   test:
     name: Test Suite
+    # Stays on ubuntu-latest: cross-OS matrix (ubuntu/macos/windows).
+    # Smithy is Linux-only; splitting per-OS would lose the per-PR
+    # signal that all three platforms still build.
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -71,6 +78,9 @@ jobs:
 
   build:
     name: Build & Verify
+    # Stays on ubuntu-latest: cross-OS matrix (linux/macos-13/macos-14/
+    # windows). Smithy is Linux-only; the matrix exists precisely to
+    # validate the four release-target OSes.
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -125,7 +135,7 @@ jobs:
 
   clippy:
     name: Clippy Lints
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, rust-cpu]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -143,7 +153,7 @@ jobs:
 
   format:
     name: Formatting Check
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, light]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -158,6 +168,9 @@ jobs:
 
   security:
     name: Security Audit
+    # Stays on ubuntu-latest: cargo-audit advisory parser on smithy
+    # (v0.21.2) rejects CVSS 4.0 advisories (RUSTSEC-2026-0037). Move
+    # back once smithy bumps cargo-audit to 0.22.1+.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -177,7 +190,7 @@ jobs:
 
   validation:
     name: Template Validation
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, light]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
