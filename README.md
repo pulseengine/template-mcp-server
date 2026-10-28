@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **This repository is archived (2026-10-28) and no longer maintained.**
+> To build an MCP server with PulseEngine, start from the framework, [`pulseengine/mcp`](https://github.com/pulseengine/mcp),
+> and use [`pulseengine/timedate-mcp`](https://github.com/pulseengine/timedate-mcp) as a working example.
+
 <div align="center">
 
 # Template MCP Server
